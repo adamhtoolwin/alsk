@@ -1,2 +1,3 @@
 /.idea
-/dataset/*
+/dataset/data_preprocessed_python/*
+/dataset/metadata_csv/*

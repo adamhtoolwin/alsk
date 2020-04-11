@@ -1,12 +1,26 @@
 import pickle
 import glob
 
-path = '../dataset/data_preprocessed_python/s01.dat'
-eeg_files_m = glob.glob(r"../dataset/data_preprocessed_python/*.dat")
 
-data = pickle.load(open(path, 'rb'), encoding='iso-8859-1')
+def test():
+    path = '../dataset/data_preprocessed_python/s01.dat'
+    eeg_files_m = glob.glob("../dataset/data_preprocessed_python/*.dat")
 
-print("Video Num", len(data['data']))
+    data = pickle.load(open(path, 'rb'), encoding='iso-8859-1')
 
-for each_eeg_seq, each_label in zip(data['data'], data['labels']):
-    print(each_eeg_seq.shape, each_label)
+    print("Video Num", len(data['data']))
+
+    for each_eeg_seq, each_label in zip(data['data'], data['labels']):
+        print(each_eeg_seq.shape, each_label)
+
+    for each in eeg_files_m:
+        print(each)
+
+
+from dataset.DEAP_DATASET import DEAP_DATASET
+
+DATA_SET_PATH = '../dataset/data_preprocessed_python/'
+
+data_set = DEAP_DATASET(DATA_SET_PATH)
+
+
