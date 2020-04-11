@@ -24,8 +24,11 @@ class DEAP_DATASET(Dataset):
     def __getitem__(self, i):
         eeg = self.__WHOLE_DATA[self.__CURR_PART_ID]['data'][i]
         label = self.__WHOLE_DATA[self.__CURR_PART_ID]['labels'][i]
-        return eeg, label
+        return torch.tensor(eeg, dtype=torch.float), torch.tensor(label, dtype=torch.float)
 
     # TESTING METHOD
     def test_get_item(self, i):
         return self.__getitem__(i)
+
+    def test_len(self):
+        return self.__len__()

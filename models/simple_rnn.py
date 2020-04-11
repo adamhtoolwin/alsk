@@ -18,7 +18,7 @@ class SIMPLE_RNN(torch.nn.Module):
         # Input to hidden
         hidden = self.relu_act(self.i2h(combined))
         # Input to output
-        output = self.i2o(combined)
+        output = self.relu_act(self.i2o(combined))
         return output, hidden
 
     # Init the hidden vector (All zeroes)
