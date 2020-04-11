@@ -1,5 +1,5 @@
 from dataset.DEAP_DATASET import DEAP_DATASET
-from model.simple_rnn import SIMPLE_RNN
+from models.simple_rnn import SIMPLE_RNN
 from util.train import *
 from torch.utils.data import DataLoader
 
