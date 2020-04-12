@@ -2,4 +2,5 @@
 /dataset/data_preprocessed_python/*
 /dataset/metadata_csv/*
 /dataset/*.dat
+/dataset/__pycache__/
 

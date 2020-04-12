@@ -32,3 +32,25 @@ class DEAP_DATASET(Dataset):
 
     def test_len(self):
         return self.__len__()
+
+
+class CombinedDeapDataset(Dataset):
+
+    def __init__(self, path: str):
+        eeg_file_path = str(path) + "eegs.dat"
+        labels_file_path = str(path) + "labels.dat"
+
+        self.eegs = pickle.load(open(eeg_file_path, 'rb'), encoding='iso-8859-1')
+        self.labels = pickle.load(open(labels_file_path, 'rb'), encoding='iso-8859-1')
+
+        assert len(self.eegs) == len(self.labels)
+
+    def __len__(self):
+        assert len(self.eegs) == len(self.labels)
+        return len(self.labels)
+
+    def __getitem__(self, i):
+        eeg = self.eegs[i]
+        label = self.labels[i]
+        return torch.tensor(eeg, dtype=torch.float), torch.tensor(label, dtype=torch.float)
+
