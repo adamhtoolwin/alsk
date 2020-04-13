@@ -6,13 +6,14 @@ DBG = False
 
 
 def train_lstm(model, optim, criterion, data_loader, device):
-    hidden = model.initHidden()
-    hidden = [h.to(device) for h in hidden]
-
     loss_hist = []
     model.train()
     for i, (signal, label) in tqdm(enumerate(data_loader)):
-        signal = signal.to(device)
+        # Init the hidden input for single time
+        hidden = model.initHidden()
+        hidden = [h.to(device) for h in hidden]
+
+        signal = signal.to(device) # It increase for 100 MB (Single time)
         label = label.to(device)
 
         output = None
@@ -22,12 +23,12 @@ def train_lstm(model, optim, criterion, data_loader, device):
 
         optim.zero_grad()
 
-        output, hidden = model(signal, hidden)
+        output = model(signal, hidden)
 
         # print(output)
         # print(output, label)
         loss = criterion(output, label)
-        loss.backward(retain_graph=True)
+        loss.backward(retain_graph=True) # Mem_inc [1st: 600MB, 3rd: 600MB]
         print(" Training Loss: ", loss.item())
         optim.step()
         loss_hist.append(loss.item())
