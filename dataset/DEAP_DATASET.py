@@ -35,7 +35,10 @@ class DEAP_DATASET(Dataset):
 
 class ModularDeapDataset(Dataset):
     def __init__(self, path: str, train=True):
-        self.files = glob.glob(str(path) + "modular/*.dat")
+        if train:
+            self.files = glob.glob(str(path) + "modular/train/*.dat")
+        else:
+            self.files = glob.glob(str(path) + "modular/test/*.dat")
 
     def __len__(self):
         return len(self.files)
