@@ -4,11 +4,16 @@ import torch
 DBG = False
 
 
-def eval(model, criterion, data_loader, eval_size):
+def eval(model, criterion, data_loader, device, eval_size):
     hidden = model.initHidden()
+    hidden = hidden.to(device)
+
     loss_hist = []
     model.eval()
     for i, (signal, label) in enumerate(data_loader):
+        signal = signal.to(device)
+        label = label.to(device)
+
         output = None
         if i >= eval_size:
             break
@@ -24,11 +29,16 @@ def eval(model, criterion, data_loader, eval_size):
     return mean(loss_hist)
 
 
-def train(model, optim, criterion, data_loader):
+def train(model, optim, criterion, data_loader, device):
     hidden = model.initHidden()
+    hidden = hidden.to(device)
+
     loss_hist = []
     model.train()
     for i, (signal, label) in enumerate(data_loader):
+        signal = signal.to(device)
+        label = label.to(device)
+
         output = None
         # Just add the option to skip the training if its too long
         if DBG and i > 5:

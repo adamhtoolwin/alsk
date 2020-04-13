@@ -7,7 +7,15 @@ from torch import optim
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
+
+
 DATA_SET_PATH = 'dataset/'
+
+CUDA = True
+gpu_id = '1'
+device = torch.device("cuda:" + gpu_id if CUDA and torch.cuda.is_available() else "cpu")
+print("Using ", device)
+print("")
 
 deap_dataset = CombinedDeapDataset(DATA_SET_PATH)
 
@@ -23,6 +31,7 @@ INPUT_SIZE = 40
 HIDDEN_SIZE = 160
 OUTPUT_SIZE = 4
 model = SIMPLE_RNN(INPUT_SIZE, HIDDEN_SIZE, OUTPUT_SIZE)
+model.to(device)
 
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()
@@ -31,13 +40,14 @@ EPCH = 20
 optim = optim.Adam(model.parameters(), lr=LR)
 EXPORT_PATH = 'models/saved_weights/simple_rnn_v2.pth'
 
+print("==============================")
 print("Starting training...")
 loss_hist = []
 val_loss_hist = []
 for i in tqdm(range(EPCH)):
-    avg_loss = train(model, optim, CRITERION, deap_train_loader)
+    avg_loss = train(model, optim, CRITERION, deap_train_loader, device)
     loss_hist.append(avg_loss)
-    val_loss = eval(model, CRITERION, deap_test_loader, eval_size=99999)
+    val_loss = eval(model, CRITERION, deap_test_loader, device, eval_size=99999)
     export_or_not(val_loss, val_loss_hist, model, EXPORT_PATH)
     val_loss_hist.append(val_loss)
     if i % 1 == 0:
