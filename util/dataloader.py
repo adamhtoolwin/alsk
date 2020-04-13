@@ -17,14 +17,10 @@ def test():
         print(each)
 
 
-from dataset.DEAP_DATASET import DEAP_DATASET
+from dataset.DEAP_DATASET import DEAP_DATASET, CombinedDeapDataset
 
-DATA_SET_PATH = '../dataset/data_preprocessed_python/'
+DATA_SET_PATH = '../dataset/'
 
-data_set = DEAP_DATASET(DATA_SET_PATH)
-data_set.set_participant_id(2)
-print("##TEST SECTION##")
-test_sample_eeg, test_sample_label = data_set.test_get_item(2)
-print(test_sample_eeg.shape, test_sample_label.shape)
+data_set = CombinedDeapDataset(DATA_SET_PATH)
 
-print(data_set.test_len())
+import pdb; pdb.set_trace()

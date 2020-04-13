@@ -10,14 +10,16 @@ def eval(model, criterion, data_loader, eval_size):
     model.eval()
     for i, (signal, label) in enumerate(data_loader):
         output = None
-        if i > eval_size:
+        if i >= eval_size:
             break
         for j in range(signal.shape[2]):
             pts_signal = signal[:, :, j]
             output, hidden = model(pts_signal, hidden)
-        # print(output)
-        # print(output, label)
+        # print("Predicted: ", output)
+        # print("Label: ", label)
+
         loss = criterion(output, label)
+        # print("Loss: ", loss.item())
         loss_hist.append(loss.item())
     return mean(loss_hist)
 
