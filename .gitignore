@@ -3,4 +3,5 @@
 /dataset/metadata_csv/*
 /dataset/*.dat
 /dataset/__pycache__/
+/models/saved_weights/*
 

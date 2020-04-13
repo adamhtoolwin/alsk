@@ -10,13 +10,12 @@ class DEAP_DATASET(Dataset):
     __CURR_PART_ID = 0
 
     def __init__(self, path: str):
-        EEG_FILES = glob.glob(str(path) + "*.dat")
-        for each_path in EEG_FILES:
-            dat = pickle.load(open(each_path, 'rb'), encoding='iso-8859-1')
-            self.__WHOLE_DATA.append(dat)
+        self.EEG_FILES = glob.glob(str(path) + "*.dat")
 
     def set_participant_id(self, i):
         self.__CURR_PART_ID = i
+        dat = pickle.load(open(self.EEG_FILES[i], 'rb'), encoding='iso-8859-1')
+        self.__WHOLE_DATA.append(dat)
 
     def __len__(self):
         return len(self.__WHOLE_DATA[self.__CURR_PART_ID]['labels'])
