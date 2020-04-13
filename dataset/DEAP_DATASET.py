@@ -40,8 +40,8 @@ class CombinedDeapDataset(Dataset):
         eeg_file_path = str(path) + "eegs.dat"
         labels_file_path = str(path) + "labels.dat"
 
-        self.eegs = pickle.load(open(eeg_file_path, 'rb'), encoding='iso-8859-1')
         self.labels = pickle.load(open(labels_file_path, 'rb'), encoding='iso-8859-1')
+        self.eegs = pickle.load(open(eeg_file_path, 'rb'), encoding='iso-8859-1')
 
         assert len(self.eegs) == len(self.labels)
 
