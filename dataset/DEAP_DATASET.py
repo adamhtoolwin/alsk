@@ -10,7 +10,7 @@ class DEAP_DATASET(Dataset):
     __CURR_PART_ID = 0
 
     def __init__(self, path: str):
-        self.EEG_FILES = glob.glob(str(path) + "*.dat")
+        self.EEG_FILES = glob.glob(str(path) + "/data_preprocessed_python/*.dat")
 
     def set_participant_id(self, i):
         self.__CURR_PART_ID = i
@@ -33,6 +33,21 @@ class DEAP_DATASET(Dataset):
         return self.__len__()
 
 
+class ModularDeapDataset(Dataset):
+    def __init__(self, path: str, train=True):
+        self.files = glob.glob(str(path) + "modular/*.dat")
+
+    def __len__(self):
+        return len(self.files)
+
+    def __getitem__(self, i):
+        data = pickle.load(open(self.files[0], 'rb'), encoding='iso-8859-1')
+
+        eeg = data['data']
+        label = data['label']
+        return torch.tensor(eeg, dtype=torch.float), torch.tensor(label, dtype=torch.float)
+
+
 class CombinedDeapDataset(Dataset):
 
     def __init__(self, path: str):
@@ -52,4 +67,7 @@ class CombinedDeapDataset(Dataset):
         eeg = self.eegs[i]
         label = self.labels[i]
         return torch.tensor(eeg, dtype=torch.float), torch.tensor(label, dtype=torch.float)
+
+
+
 

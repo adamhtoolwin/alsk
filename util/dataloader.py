@@ -17,10 +17,10 @@ def test():
         print(each)
 
 
-from dataset.DEAP_DATASET import DEAP_DATASET, CombinedDeapDataset
+from dataset.DEAP_DATASET import DEAP_DATASET, CombinedDeapDataset, ModularDeapDataset
 
 DATA_SET_PATH = '../dataset/'
 
-data_set = CombinedDeapDataset(DATA_SET_PATH)
+data_set = ModularDeapDataset(DATA_SET_PATH)
 
 import pdb; pdb.set_trace()
