@@ -41,7 +41,7 @@ class ModularDeapDataset(Dataset):
         return len(self.files)
 
     def __getitem__(self, i):
-        data = pickle.load(open(self.files[0], 'rb'), encoding='iso-8859-1')
+        data = pickle.load(open(self.files[i], 'rb'), encoding='iso-8859-1')
 
         eeg = data['data']
         label = data['label']
