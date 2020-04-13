@@ -3,5 +3,7 @@
 /dataset/metadata_csv/*
 /dataset/*.dat
 /dataset/__pycache__/
+/dataset/modular/
+
 /models/saved_weights/*
 
