@@ -8,7 +8,7 @@ DBG = False
 def train_lstm(model, optim, criterion, data_loader, device):
     loss_hist = []
     model.train()
-    for i, (signal, label) in tqdm(enumerate(data_loader)):
+    for i, (signal, label) in enumerate(data_loader):
         # Init the hidden input for single time
         hidden = model.initHidden()
         hidden = [h.to(device) for h in hidden]
@@ -29,7 +29,7 @@ def train_lstm(model, optim, criterion, data_loader, device):
         # print(output, label)
         loss = criterion(output, label)
         loss.backward()
-        print(" Training Loss: ", loss.item())
+        # print(" Training Loss: ", loss.item())
         optim.step()
         loss_hist.append(loss.item())
     return mean(loss_hist)
@@ -39,7 +39,7 @@ def eval_lstm(model, criterion, data_loader, device, eval_size):
 
     loss_hist = []
     model.eval()
-    for i, (signal, label) in tqdm(enumerate(data_loader)):
+    for i, (signal, label) in enumerate(data_loader):
         hidden = model.initHidden()
         hidden = [h.to(device) for h in hidden]
 
@@ -56,7 +56,7 @@ def eval_lstm(model, criterion, data_loader, device, eval_size):
         # print("Label: ", label)
 
         loss = criterion(output, label)
-        print(" Validation Loss: ", loss.item())
+        # print(" Validation Loss: ", loss.item())
         # print("Loss: ", loss.item())
         loss_hist.append(loss.item())
     return mean(loss_hist)

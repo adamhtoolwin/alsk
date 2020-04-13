@@ -13,9 +13,9 @@ DATA_SET_PATH = 'dataset/'
 
 CUDA = True
 gpu_id = '1'
-batch_size = 64
+batch_size = 128
 device = torch.device("cuda:" + gpu_id if CUDA and torch.cuda.is_available() else "cpu")
-print("Using ", device)
+print("[SYS] Using", device)
 print("")
 
 deap_train_dataset = ModularDeapDataset(DATA_SET_PATH, train=True)
@@ -37,7 +37,7 @@ model.to(device)
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()
 LR = 1e-5
-EPCH = 20
+EPCH = 2000
 optim = optim.Adam(model.parameters(), lr=LR)
 EXPORT_PATH = 'models/saved_weights/lstm_v1.pth'
 

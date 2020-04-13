@@ -19,24 +19,23 @@ class EEGLSTM(nn.Module):
 
     def forward(self, x, hidden):
         x = torch.transpose(x, 1, 2)
-        
+
         # Input Size (1, 8064, 40), Hidden/Cell Size (1, 1, hidden_size1) (1 eeg sequence for 1 video)
-        x, hidden1 = self.lstm1(x, (hidden[0], hidden[1])) # Mem_inc [1st: 500MB]
+        x, _ = self.lstm1(x, (hidden[0], hidden[1]))  # Mem_inc [1st: 500MB]
         x = self.relu(x)
 
         # (1, 8064, hidden_size1), (1, 1, hidden_size2)
-        x, hidden2 = self.lstm2(x, (hidden[2], hidden[3])) # Mem_inc [1st: 200MB, 2nd: 200MB]
+        x, _ = self.lstm2(x, (hidden[2], hidden[3]))  # Mem_inc [1st: 200MB, 2nd: 200MB]
 
         # x = x.contiguous()
 
         x = x.reshape(self.batch_size, -1)
-        #next_hidden = [hidden1[0], hidden1[1], hidden2[0], hidden2[1]]
+        # next_hidden = [hidden1[0], hidden1[1], hidden2[0], hidden2[1]]
 
         output = self.fc(x)
 
-        return output#, next_hidden
+        return output  # , next_hidden
 
     def initHidden(self):
         return [torch.zeros(1, self.batch_size, self.hidden_size1), torch.zeros(1, self.batch_size, self.hidden_size1),
                 torch.zeros(1, self.batch_size, self.hidden_size2), torch.zeros(1, self.batch_size, self.hidden_size2)]
-
