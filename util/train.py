@@ -28,7 +28,7 @@ def train_lstm(model, optim, criterion, data_loader, device):
         # print(output)
         # print(output, label)
         loss = criterion(output, label)
-        loss.backward(retain_graph=True) # Mem_inc [1st: 600MB, 3rd: 600MB]
+        loss.backward()
         print(" Training Loss: ", loss.item())
         optim.step()
         loss_hist.append(loss.item())
@@ -36,12 +36,13 @@ def train_lstm(model, optim, criterion, data_loader, device):
 
 
 def eval_lstm(model, criterion, data_loader, device, eval_size):
-    hidden = model.initHidden()
-    hidden = [h.to(device) for h in hidden]
 
     loss_hist = []
     model.eval()
     for i, (signal, label) in tqdm(enumerate(data_loader)):
+        hidden = model.initHidden()
+        hidden = [h.to(device) for h in hidden]
+
         signal = signal.to(device)
         label = label.to(device)
 
@@ -49,7 +50,7 @@ def eval_lstm(model, criterion, data_loader, device, eval_size):
         if i >= eval_size:
             break
 
-        output, hidden = model(signal, hidden)
+        output = model(signal, hidden)
 
         # print("Predicted: ", output)
         # print("Label: ", label)
