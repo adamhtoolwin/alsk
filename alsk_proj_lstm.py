@@ -39,7 +39,10 @@ CRITERION = torch.nn.MSELoss()
 LR = 1e-5
 EPCH = 2000
 optim = optim.Adam(model.parameters(), lr=LR)
-EXPORT_PATH = 'models/saved_weights/lstm_v1.pth'
+EXPORT_PATH = 'models/saved_weights/lstm_v2.pth'
+
+# TRAINING VISUALIZE CONFIG
+PLOT_EVERY = 10
 
 print("==============================")
 print("Starting training...")
@@ -49,9 +52,11 @@ for i in tqdm(range(EPCH)):
     avg_loss = train_lstm(model, optim, CRITERION, deap_train_loader, device)
     loss_hist.append(avg_loss)
     val_loss = eval_lstm(model, CRITERION, deap_test_loader, device, eval_size=99999)
-    export_or_not(val_loss, val_loss_hist, model, EXPORT_PATH)
+    if not DBG:
+        export_or_not(val_loss, val_loss_hist, model, EXPORT_PATH)
     val_loss_hist.append(val_loss)
-    if i % 1 == 0:
+    # print(val_loss - avg_loss)
+    if i % PLOT_EVERY == 0 or i == EPCH-1:
         plt.plot(loss_hist, label="Training loss")
         plt.plot(val_loss_hist, label="Validation loss")
         plt.legend()

@@ -16,7 +16,7 @@ def test():
     for each in eeg_files_m:
         print(each)
 
-
+'''
 from dataset.DEAP_DATASET import DEAP_DATASET, CombinedDeapDataset, ModularDeapDataset
 
 DATA_SET_PATH = '../dataset/'
@@ -24,3 +24,8 @@ DATA_SET_PATH = '../dataset/'
 data_set = ModularDeapDataset(DATA_SET_PATH)
 
 import pdb; pdb.set_trace()
+'''
+
+
+for i in range(200):
+    print(i)

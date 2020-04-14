@@ -5,6 +5,14 @@ from tqdm import tqdm
 DBG = False
 
 
+# This function is used for select last element of the sequence.
+def select_last_elm(output, device):
+    last_seq_index = output.shape[1] - 1
+    sel_tensor = torch.tensor(last_seq_index).to(device)
+    output = torch.index_select(output, 1, sel_tensor).squeeze(1)
+    return output
+
+
 def train_lstm(model, optim, criterion, data_loader, device):
     loss_hist = []
     model.train()
@@ -13,7 +21,7 @@ def train_lstm(model, optim, criterion, data_loader, device):
         hidden = model.initHidden()
         hidden = [h.to(device) for h in hidden]
 
-        signal = signal.to(device) # It increase for 100 MB (Single time)
+        signal = signal.to(device)  # It increase for 100 MB (Single time)
         label = label.to(device)
 
         output = None
@@ -23,7 +31,8 @@ def train_lstm(model, optim, criterion, data_loader, device):
 
         optim.zero_grad()
 
-        output = model(signal, hidden)
+        output = model(signal, hidden)  # Expected shape: [128,8064,4]
+        output = select_last_elm(output, device)  # Now we gonna select last element [128,4]
 
         # print(output)
         # print(output, label)
@@ -32,11 +41,11 @@ def train_lstm(model, optim, criterion, data_loader, device):
         # print(" Training Loss: ", loss.item())
         optim.step()
         loss_hist.append(loss.item())
+
     return mean(loss_hist)
 
 
 def eval_lstm(model, criterion, data_loader, device, eval_size):
-
     loss_hist = []
     model.eval()
     for i, (signal, label) in enumerate(data_loader):
@@ -51,6 +60,7 @@ def eval_lstm(model, criterion, data_loader, device, eval_size):
             break
 
         output = model(signal, hidden)
+        output = select_last_elm(output, device)
 
         # print("Predicted: ", output)
         # print("Label: ", label)
