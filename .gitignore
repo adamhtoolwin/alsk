@@ -4,6 +4,7 @@
 /dataset/*.dat
 /dataset/__pycache__/
 /dataset/modular/
+/dataset/modular.zip
 
 /models/saved_weights/*
 
