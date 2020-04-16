@@ -12,7 +12,7 @@ from tqdm import tqdm
 DATA_SET_PATH = 'dataset/'
 
 CUDA = True
-gpu_id = '1'
+gpu_id = '0'
 batch_size = 128
 device = torch.device("cuda:" + gpu_id if CUDA and torch.cuda.is_available() else "cpu")
 print("[SYS] Using", device)
@@ -31,15 +31,17 @@ INPUT_SIZE = 40
 HIDDEN_SIZE1 = 64
 HIDDEN_SIZE2 = 32
 OUTPUT_SIZE = 4
+EXPORT_PATH = 'models/saved_weights/lstm_v2_dropout.pth'
+
 model = EEGLSTM(HIDDEN_SIZE1, HIDDEN_SIZE2, batch_size)
+model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
 model.to(device)
 
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()
 LR = 1e-5
-EPCH = 2000
+EPCH = 3000
 optim = optim.Adam(model.parameters(), lr=LR)
-EXPORT_PATH = 'models/saved_weights/lstm_v2.pth'
 
 # TRAINING VISUALIZE CONFIG
 PLOT_EVERY = 10
