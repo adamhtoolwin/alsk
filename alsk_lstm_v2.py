@@ -1,6 +1,6 @@
 from dataset.DEAP_DATASET import DEAP_DATASET, CombinedDeapDataset, ModularDeapDataset
 from models.simple_rnn import SIMPLE_RNN
-from models.lstm import EEGLSTM, EEGLSTM_V2
+from models.lstm import EEGLSTM, EEGLSTM_V2, EEGLSTM_V3
 from util.train import *
 from torch.utils.data import DataLoader
 import torch
@@ -32,9 +32,9 @@ HIDDEN_SIZE1 = 64
 HIDDEN_SIZE2 = 32
 HIDDEN_SIZE3 = 32
 OUTPUT_SIZE = 4
-EXPORT_PATH = 'models/saved_weights/lstm_v3_dropout.pth'
+EXPORT_PATH = 'models/saved_weights/lstm_v3.pth'
 
-model = EEGLSTM_V2(HIDDEN_SIZE1, HIDDEN_SIZE2, HIDDEN_SIZE3, batch_size)
+model = EEGLSTM_V3(HIDDEN_SIZE1, HIDDEN_SIZE2, HIDDEN_SIZE3, batch_size, channels=40)
 model.to(device)
 
 # TRAINING_CONFIG
