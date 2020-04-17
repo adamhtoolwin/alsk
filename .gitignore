@@ -6,5 +6,7 @@
 /dataset/modular/
 /dataset/modular.zip
 
+/results
+
 /models/saved_weights/*
 

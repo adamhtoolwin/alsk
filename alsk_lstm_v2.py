@@ -32,9 +32,9 @@ HIDDEN_SIZE1 = 64
 HIDDEN_SIZE2 = 32
 HIDDEN_SIZE3 = 32
 OUTPUT_SIZE = 4
-EXPORT_PATH = 'models/saved_weights/lstm_v3.pth'
+EXPORT_PATH = 'models/saved_weights/lstm_v2_3_layer.pth'
 
-model = EEGLSTM_V3(HIDDEN_SIZE1, HIDDEN_SIZE2, HIDDEN_SIZE3, batch_size, channels=40)
+model = EEGLSTM_V2(HIDDEN_SIZE1, HIDDEN_SIZE2, HIDDEN_SIZE3, batch_size)
 model.to(device)
 
 # TRAINING_CONFIG
@@ -59,8 +59,9 @@ for i in tqdm(range(EPCH)):
     val_loss_hist.append(val_loss)
     # print(val_loss - avg_loss)
     if i % PLOT_EVERY == 0 or i == EPCH-1:
+        plt.clf()
         plt.plot(loss_hist, label="Training loss")
         plt.plot(val_loss_hist, label="Validation loss")
         plt.legend()
-        plt.savefig("loss.png")
+        plt.savefig("./results/loss.png")
         plt.show()
