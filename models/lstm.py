@@ -80,7 +80,6 @@ class EEGLSTM_V2(nn.Module):
 
     def forward(self, x, hidden):
         x = torch.transpose(x, 1, 2)
-
         # Input Size (1, 8064, 40), Hidden/Cell Size (1, 1, hidden_size1) (1 eeg sequence for 1 video)
         x, _ = self.lstm1(x, (hidden[0], hidden[1]))  # Mem_inc [1st: 500MB]
         x = self.dropout(x)
@@ -95,7 +94,6 @@ class EEGLSTM_V2(nn.Module):
 
         x = self.fc(x)
         output = self.relu(x)
-
         return output  # , next_hidden
 
     def initHidden(self):
