@@ -43,7 +43,7 @@ optim = optim.Adam(model.parameters(), lr=LR)
 PLOT_EVERY = 5
 
 print("==============================")
-print("Starting training...")
+print("Starting training TCN model...")
 loss_hist = []
 val_loss_hist = []
 for i in tqdm(range(EPCH)):
