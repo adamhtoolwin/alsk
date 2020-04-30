@@ -25,7 +25,7 @@ deap_train_loader = DataLoader(deap_train_dataset, shuffle=True, batch_size=batc
 deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_size)
 
 # MODEL_CONFIG
-CHAN_LIST = [64, 32]  # The list of each convolutional layers
+CHAN_LIST = [64, 32, 2]  # The list of each convolutional layers
 KERN_SIZE = 5
 DROP_OUT = 0.2
 EXPORT_PATH = 'models/saved_weights/tcn_v0.pth'
@@ -47,9 +47,9 @@ print("Starting training...")
 loss_hist = []
 val_loss_hist = []
 for i in tqdm(range(EPCH)):
-    avg_loss = train_lstm(model, optim, CRITERION, deap_train_loader, device)
+    avg_loss = train_tcn(model, optim, CRITERION, deap_train_loader, device)
     loss_hist.append(avg_loss)
-    val_loss = eval_lstm(model, CRITERION, deap_test_loader, device, eval_size=99999)
+    val_loss = eval_tcn(model, CRITERION, deap_test_loader, device, eval_size=99999)
     if not DBG:
         export_or_not(val_loss, val_loss_hist, model, EXPORT_PATH)
     val_loss_hist.append(val_loss)
