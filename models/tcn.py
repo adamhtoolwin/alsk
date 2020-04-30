@@ -13,4 +13,5 @@ class EEG_TCN(nn.Module):
         # x needs to have dimension (N, C, L) in order to be passed into CNN
         output = self.tcn(x).transpose(1, 2)
         #output = self.linear(output).double()
-        return self.sigsig(output) * 10
+        # return self.sigsig(output) * 10
+        return output

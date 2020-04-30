@@ -25,7 +25,7 @@ deap_train_loader = DataLoader(deap_train_dataset, shuffle=True, batch_size=batc
 deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_size)
 
 # MODEL_CONFIG
-CHAN_LIST = [64, 32, 2]  # The list of each convolutional layers
+CHAN_LIST = [150, 64, 2]  # The list of each convolutional layers
 KERN_SIZE = 5
 DROP_OUT = 0.2
 EXPORT_PATH = 'models/saved_weights/tcn_v0.pth'
@@ -38,12 +38,19 @@ CRITERION = torch.nn.MSELoss()
 LR = 1e-4
 EPCH = 6000
 optim = optim.Adam(model.parameters(), lr=LR)
+RESUME = False
 
 # TRAINING VISUALIZE CONFIG
 PLOT_EVERY = 5
 
 print("==============================")
 print("Starting training TCN model...")
+
+if RESUME:
+    print(">> Loading previous model from : "+EXPORT_PATH)
+    model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
+    model.to(device)
+
 loss_hist = []
 val_loss_hist = []
 for i in tqdm(range(EPCH)):
@@ -59,5 +66,5 @@ for i in tqdm(range(EPCH)):
         plt.plot(loss_hist, label="Training loss")
         plt.plot(val_loss_hist, label="Validation loss")
         plt.legend()
-        plt.savefig("./results/loss.png")
+        plt.savefig("./results/loss_tcn.png")
         plt.show()

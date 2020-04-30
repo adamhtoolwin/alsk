@@ -12,7 +12,7 @@ class EEGLSTM_V3(nn.Module):
         self.batch_size = batch_size
         self.channels = channels
 
-        self.conv = nn.Conv1d(self.channels, self.channels, kernel_size=1)
+        self.conv = nn.Conv1d(self.channels, self.channels/2, kernel_size=1)
 
         self.lstm1 = nn.LSTM(self.channels, self.hidden_size1, batch_first=True)
         self.dropout = nn.Dropout(p=0.2)
