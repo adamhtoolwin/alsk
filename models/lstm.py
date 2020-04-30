@@ -22,7 +22,7 @@ class EEGLSTM_V3(nn.Module):
         self.relu = nn.ReLU()
 
         # self.fc = nn.Linear(8064 * self.hidden_size2, 4) # It should
-        self.fc = nn.Linear(self.hidden_size2, 4)
+        self.fc = nn.Linear(self.hidden_size2, 2)
 
     # Do 1 cnn dimensional << Let's try
     # increase number of layer
@@ -73,7 +73,7 @@ class EEGLSTM_V2(nn.Module):
         self.relu = nn.ReLU()
 
         # self.fc = nn.Linear(8064 * self.hidden_size2, 4) # It should
-        self.fc = nn.Linear(self.hidden_size2, 4)
+        self.fc = nn.Linear(self.hidden_size2, 2)
 
     # Do 1 cnn dimensional << Let's try
     # increase number of layer
@@ -116,7 +116,7 @@ class EEGLSTM(nn.Module):
         self.lstm2 = nn.LSTM(self.hidden_size1, self.hidden_size2, batch_first=True)
 
         self.relu = nn.ReLU()
-        self.fc = nn.Linear(self.hidden_size2, 4)
+        self.fc = nn.Linear(self.hidden_size2, 2)
 
     def forward(self, x, hidden):
         x = torch.transpose(x, 1, 2)
