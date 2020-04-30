@@ -1,4 +1,4 @@
-from dataset.DEAP_DATASET import DEAP_DATASET, CombinedDeapDataset, ModularDeapDataset
+from dataset.DEAP_DATASET import ModularDeapDataset
 from models.tcn import EEG_TCN
 from util.train import *
 from torch.utils.data import DataLoader
@@ -10,7 +10,7 @@ from tqdm import tqdm
 DATA_SET_PATH = 'dataset/'
 
 CUDA = True
-gpu_id = '1'
+gpu_id = '0'
 batch_size = 128
 device = torch.device("cuda:" + gpu_id if CUDA and torch.cuda.is_available() else "cpu")
 print("[SYS] Using", device)
