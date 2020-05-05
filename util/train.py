@@ -11,6 +11,11 @@ def select_last_elm(output, device):
     sel_tensor = torch.tensor(last_seq_index).to(device)
     output = torch.index_select(output, 1, sel_tensor).squeeze(1)
     return output
+def export_or_not(val_loss, val_loss_hist, model, path):
+    if len(val_loss_hist) == 0:
+        torch.save(model.state_dict(), path)
+    elif val_loss < val_loss_hist[len(val_loss_hist) - 1]:
+        torch.save(model.state_dict(), path)
 
 
 def train_tcn(model, optim, criterion, data_loader, device):
@@ -67,7 +72,7 @@ def eval_tcn(model, criterion, data_loader, device, eval_size):
     return mean(loss_hist)
 
 
-def train_lstm(model, optim, criterion, data_loader, device):
+def train_lstm_gru(model, optim, criterion, data_loader, device):
     loss_hist = []
     model.train()
     for i, (signal, label) in enumerate(data_loader):
@@ -99,7 +104,7 @@ def train_lstm(model, optim, criterion, data_loader, device):
     return mean(loss_hist)
 
 
-def eval_lstm(model, criterion, data_loader, device, eval_size):
+def eval_lstm_gru(model, criterion, data_loader, device, eval_size):
     loss_hist = []
     model.eval()
     for i, (signal, label) in enumerate(data_loader):
@@ -124,7 +129,6 @@ def eval_lstm(model, criterion, data_loader, device, eval_size):
         # print("Loss: ", loss.item())
         loss_hist.append(loss.item())
     return mean(loss_hist)
-
 
 def eval(model, criterion, data_loader, device, eval_size):
     hidden = model.initHidden()
@@ -177,10 +181,3 @@ def train(model, optim, criterion, data_loader, device):
         optim.step()
         loss_hist.append(loss.item())
     return mean(loss_hist)
-
-
-def export_or_not(val_loss, val_loss_hist, model, path):
-    if len(val_loss_hist) == 0:
-        torch.save(model.state_dict(), path)
-    elif val_loss < val_loss_hist[len(val_loss_hist) - 1]:
-        torch.save(model.state_dict(), path)

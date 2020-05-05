@@ -51,9 +51,9 @@ print("Starting training...")
 loss_hist = []
 val_loss_hist = []
 for i in tqdm(range(EPCH)):
-    avg_loss = train_lstm(model, optim, CRITERION, deap_train_loader, device)
+    avg_loss = train_lstm_gru(model, optim, CRITERION, deap_train_loader, device)
     loss_hist.append(avg_loss)
-    val_loss = eval_lstm(model, CRITERION, deap_test_loader, device, eval_size=99999)
+    val_loss = eval_lstm_gru(model, CRITERION, deap_test_loader, device, eval_size=99999)
     if not DBG:
         export_or_not(val_loss, val_loss_hist, model, EXPORT_PATH)
     val_loss_hist.append(val_loss)
