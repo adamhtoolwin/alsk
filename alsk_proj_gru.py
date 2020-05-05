@@ -11,7 +11,7 @@ from tqdm import tqdm
 DATA_SET_PATH = 'dataset/'
 
 CUDA = True
-gpu_id = '0'
+gpu_id = '1'
 batch_size = 128
 device = torch.device("cuda:" + gpu_id if CUDA and torch.cuda.is_available() else "cpu")
 print("[SYS] Using", device, "\n")
@@ -23,10 +23,12 @@ deap_train_loader = DataLoader(deap_train_dataset, shuffle=True, batch_size=batc
 deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_size)
 
 # MODEL_CONFIG
-FEATURE_LIST = [64, 32]
+FEATURE_LIST = [32, 16]
+input_size = 32
 EXPORT_PATH = 'models/saved_weights/gru__dropout.pth'
 
-model = DEAP_GRU(FEATURE_LIST, batch_size)
+model = DEAP_GRU(FEATURE_LIST, batch_size, input_size)
+model.to(device)
 
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()

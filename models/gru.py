@@ -4,15 +4,16 @@ import torch.nn as nn
 
 class DEAP_GRU(nn.Module):
     # We use all of the features in the dataset
-    def __init__(self, fea_list: list, batch_size):
+    def __init__(self, fea_list: list, batch_size, input_size):
         super(DEAP_GRU, self).__init__()
-        self.gru_unit_list = []
+        self.gru_unit_list = nn.ModuleList()
         self.bs = batch_size
         self.fea_list = fea_list + [2]
+        self.input_size = input_size
 
         print("ARCH:[ ", end="")
         print(40, "--> ", end="")
-        self.gru_unit_list.append(nn.GRU(input_size=40, hidden_size=fea_list[0], batch_first=True))
+        self.gru_unit_list.append(nn.GRU(input_size=self.input_size, hidden_size=fea_list[0], batch_first=True))
 
         for i, each_fea in enumerate(fea_list):
 
@@ -29,8 +30,8 @@ class DEAP_GRU(nn.Module):
     def forward(self, x, hidden_l):
         x = torch.transpose(x, 1, 2)
         for i, each_gru in enumerate(self.gru_unit_list):
-            print("Passing in layer ["+str(i)+"], Hidden =", self.fea_list[i], hidden_l[i].shape)
-            x, _ = each_gru(x,hidden_l[i])
+            # print("Passing in layer ["+str(i)+"], Hidden =", self.fea_list[i], hidden_l[i].shape)
+            x, _ = each_gru(x, hidden_l[i])
             if i != len(self.gru_unit_list) - 2: # Only apply dropout after first 4 units
                 x = self.dropout(x)
         return x

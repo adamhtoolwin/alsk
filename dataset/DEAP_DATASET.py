@@ -46,7 +46,8 @@ class ModularDeapDataset(Dataset):
     def __getitem__(self, i):
         data = pickle.load(open(self.files[i], 'rb'), encoding='iso-8859-1')
 
-        eeg = data['data']
+        # select only first 32 channels
+        eeg = data['data'][0:32]
         label = data['label']
         return torch.tensor(eeg, dtype=torch.float), torch.tensor(label, dtype=torch.float)
 

@@ -6,7 +6,7 @@
 /dataset/modular/
 /dataset/modular.zip
 /dataset/modular_val_arousal.zip
-
+/.ipynb_checkpoints
 /results
 
 /models/saved_weights/*
