@@ -12,14 +12,12 @@ DATA_SET_PATH = 'dataset/'
 CUDA = True
 gpu_id = '1'
 batch_size = 128
-device = torch.device("cuda:" + gpu_id if CUDA and torch.cuda.is_available() else "cpu")
+device = "cuda"
 print("[SYS] Using", device)
 print("")
 
 deap_train_dataset = ModularDeapDataset(DATA_SET_PATH, train=True)
 deap_test_dataset = ModularDeapDataset(DATA_SET_PATH, train=False)
-
-# import pdb; pdb.set_trace()
 
 deap_train_loader = DataLoader(deap_train_dataset, shuffle=True, batch_size=batch_size)
 deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_size)
@@ -28,7 +26,7 @@ deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_
 CHAN_LIST = [32, 24, 16, 10, 6, 2]  # The list of each convolutional layers
 KERN_SIZE = 5
 DROP_OUT = 0.2
-EXPORT_PATH = 'models/saved_weights/tcn_deeper_v2.pth'
+EXPORT_PATH = 'models/saved_weights/tcn_deeper_v2.1.pth'
 
 model = EEG_TCN(CHAN_LIST, KERN_SIZE, DROP_OUT)
 model.to(device)
