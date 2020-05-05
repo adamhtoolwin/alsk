@@ -1,6 +1,6 @@
 from dataset.DEAP_DATASET import DEAP_DATASET, CombinedDeapDataset, ModularDeapDataset
 from models.simple_rnn import SIMPLE_RNN
-from models.lstm import EEGLSTM, EEGLSTM_V2, EEGLSTM_V3
+from models.lstm import *
 from util.train import *
 from torch.utils.data import DataLoader
 import torch
@@ -28,19 +28,19 @@ deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_
 
 # MODEL_CONFIG
 INPUT_SIZE = 40
-HIDDEN_SIZE1 = 64
+HIDDEN_SIZE1 = 20
 HIDDEN_SIZE2 = 32
 HIDDEN_SIZE3 = 32
 OUTPUT_SIZE = 4
-EXPORT_PATH = 'models/saved_weights/lstm_v2_3_layer.pth'
+EXPORT_PATH = 'models/saved_weights/mini_lstm.pth'
 
-model = EEGLSTM_V2(HIDDEN_SIZE1, HIDDEN_SIZE2, HIDDEN_SIZE3, batch_size)
+model = MiniLSTM(HIDDEN_SIZE1, batch_size)
 model.to(device)
 
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()
 LR = 1e-4
-EPCH = 6000
+EPCH = 1000
 optim = optim.Adam(model.parameters(), lr=LR)
 
 # TRAINING VISUALIZE CONFIG

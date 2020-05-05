@@ -28,7 +28,7 @@ deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_
 CHAN_LIST = [150, 64, 2]  # The list of each convolutional layers
 KERN_SIZE = 5
 DROP_OUT = 0.2
-EXPORT_PATH = 'models/saved_weights/tcn_v0.pth'
+EXPORT_PATH = 'models/saved_weights/tcn_really_v0.pth'
 
 model = EEG_TCN(CHAN_LIST, KERN_SIZE, DROP_OUT)
 model.to(device)

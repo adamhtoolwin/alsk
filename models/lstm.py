@@ -134,3 +134,36 @@ class EEGLSTM(nn.Module):
     def initHidden(self):
         return [torch.zeros(1, self.batch_size, self.hidden_size1), torch.zeros(1, self.batch_size, self.hidden_size1),
                 torch.zeros(1, self.batch_size, self.hidden_size2), torch.zeros(1, self.batch_size, self.hidden_size2)]
+
+class MiniLSTM(nn.Module):
+    """
+    Based off V2.
+    """
+    def __init__(self, hidden_size1, batch_size):
+        super(MiniLSTM, self).__init__()
+
+        self.hidden_size1 = hidden_size1  # 64
+        self.batch_size = batch_size
+
+        self.lstm1 = nn.LSTM(40, self.hidden_size1, batch_first=True)
+
+        self.relu = nn.ReLU()
+
+        # self.fc = nn.Linear(8064 * self.hidden_size2, 4) # It should
+        self.fc = nn.Linear(self.hidden_size1, 2)
+
+    # Do 1 cnn dimensional << Let's try
+    # increase number of layer
+
+    def forward(self, x, hidden):
+        x = torch.transpose(x, 1, 2)
+        # Input Size (1, 8064, 40), Hidden/Cell Size (1, 1, hidden_size1) (1 eeg sequence for 1 video)
+        x, _ = self.lstm1(x, (hidden[0], hidden[1]))  # Mem_inc [1st: 500MB]
+
+        x = self.fc(x)
+        output = self.relu(x)
+        return output  # , next_hidden
+
+    def initHidden(self):
+        return [torch.zeros(1, self.batch_size, self.hidden_size1), torch.zeros(1, self.batch_size, self.hidden_size1)]
+
