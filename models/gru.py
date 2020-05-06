@@ -17,6 +17,9 @@ class DEAP_GRU(nn.Module):
 
         for i, each_fea in enumerate(fea_list):
 
+            if len(fea_list) == 1:
+                break
+
             print(fea_list[i], "--> ", end="")
             self.gru_unit_list.append(nn.GRU(input_size=each_fea, hidden_size=fea_list[i + 1], batch_first=True))
 

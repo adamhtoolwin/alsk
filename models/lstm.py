@@ -103,14 +103,15 @@ class EEGLSTM_V2(nn.Module):
 
 
 class EEGLSTM(nn.Module):
-    def __init__(self, hidden_size1, hidden_size2, batch_size):
+    def __init__(self, input_size, hidden_size1, hidden_size2, batch_size):
         super(EEGLSTM, self).__init__()
 
         self.hidden_size1 = hidden_size1  # 64
         self.hidden_size2 = hidden_size2  # 32
         self.batch_size = batch_size
+        self.input_size = input_size
 
-        self.lstm1 = nn.LSTM(40, self.hidden_size1, batch_first=True)
+        self.lstm1 = nn.LSTM(self.input_size, self.hidden_size1, batch_first=True)
         # Put dropout here later :D
         self.dropout = nn.Dropout(p=0.2)
         self.lstm2 = nn.LSTM(self.hidden_size1, self.hidden_size2, batch_first=True)
