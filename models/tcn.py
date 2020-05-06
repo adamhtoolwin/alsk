@@ -5,7 +5,7 @@ from models.component.TCN import TemporalConvNet
 class EEG_TCN(nn.Module):
     def __init__(self, num_channels, kernel_size, dropout):
         super(EEG_TCN, self).__init__()
-        self.tcn = TemporalConvNet(40, num_channels, kernel_size, dropout=dropout)
+        self.tcn = TemporalConvNet(32, num_channels, kernel_size, dropout=dropout)
         #self.linear = nn.Linear(num_channels[-1], 2)
         self.sigsig = nn.Sigmoid()
 

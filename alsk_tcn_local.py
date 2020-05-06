@@ -9,12 +9,9 @@ from tqdm import tqdm
 
 DATA_SET_PATH = 'dataset/'
 
-CUDA = True
-gpu_id = '1'
 batch_size = 128
-device = "cuda"
+device = "cuda:1"
 print("[SYS] Using", device)
-print("")
 
 deap_train_dataset = ModularDeapDataset(DATA_SET_PATH, train=True)
 deap_test_dataset = ModularDeapDataset(DATA_SET_PATH, train=False)
@@ -26,7 +23,7 @@ deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_
 CHAN_LIST = [32, 24, 16, 10, 6, 2]  # The list of each convolutional layers
 KERN_SIZE = 5
 DROP_OUT = 0.2
-EXPORT_PATH = 'models/saved_weights/tcn_deeper_v2.1.pth'
+EXPORT_PATH = 'models/saved_weights/tcn_deeper_small_kern.pth'
 
 model = EEG_TCN(CHAN_LIST, KERN_SIZE, DROP_OUT)
 model.to(device)
@@ -39,15 +36,29 @@ optim = optim.Adam(model.parameters(), lr=LR)
 RESUME = False
 
 # TRAINING VISUALIZE CONFIG
-PLOT_EVERY = 5
+PLOT_EVERY = 10
 
-print("==============================")
-print("Starting training TCN model...")
+print("===========[TCN INFO REPORT]===========")
+print("<I> Using model config")
+print("\tModel feature list :", CHAN_LIST)
+print("\tModel kernel size :", KERN_SIZE)
+print("\tModel drop out:", DROP_OUT)
+print("\tExport path :", EXPORT_PATH)
+print("<I> Using training config")
+print("\tBatch size :", batch_size)
+print("\tLearning Rate :", LR)
+print("\tEpochs :", EPCH)
+print("\tOptimizer :", "Adam")
 
 if RESUME:
-    print(">> Loading previous model from : "+EXPORT_PATH)
+    print("<I> Resume the model training...")
     model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
     model.to(device)
+else:
+    print("<W> Resume has not set")
+    input("\tPress ENTER to proceed.")
+
+print("Starting training model...")
 
 loss_hist = []
 val_loss_hist = []
@@ -64,5 +75,5 @@ for i in tqdm(range(EPCH)):
         plt.plot(loss_hist, label="Training loss")
         plt.plot(val_loss_hist, label="Validation loss")
         plt.legend()
-        plt.savefig("./results/loss_tcn_part2.png")
+        plt.savefig("./results/loss_tcn_small_kern.png")
         plt.show()

@@ -12,7 +12,7 @@ class DEAP_GRU(nn.Module):
         self.input_size = input_size
 
         print("ARCH:[ ", end="")
-        print(40, "--> ", end="")
+        print(input_size, "--> ", end="")
         self.gru_unit_list.append(nn.GRU(input_size=self.input_size, hidden_size=fea_list[0], batch_first=True))
 
         for i, each_fea in enumerate(fea_list):
