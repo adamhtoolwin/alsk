@@ -12,9 +12,9 @@ class EEGLSTM_V3(nn.Module):
         self.batch_size = batch_size
         self.channels = channels
 
-        self.conv = nn.Conv1d(self.channels, self.channels/2, kernel_size=1)
+        self.conv = nn.Conv1d(self.channels, int(self.channels/2), kernel_size=1)
 
-        self.lstm1 = nn.LSTM(self.channels, self.hidden_size1, batch_first=True)
+        self.lstm1 = nn.LSTM(int(self.channels/2), self.hidden_size1, batch_first=True)
         self.dropout = nn.Dropout(p=0.2)
         self.lstm2 = nn.LSTM(self.hidden_size1, self.hidden_size2, batch_first=True)
         self.lstm3 = nn.LSTM(self.hidden_size2, self.hidden_size3, batch_first=True)
@@ -65,7 +65,7 @@ class EEGLSTM_V2(nn.Module):
         self.hidden_size3 = hidden_size3  # 32
         self.batch_size = batch_size
 
-        self.lstm1 = nn.LSTM(40, self.hidden_size1, batch_first=True)
+        self.lstm1 = nn.LSTM(32, self.hidden_size1, batch_first=True)
         self.dropout = nn.Dropout(p=0.2)
         self.lstm2 = nn.LSTM(self.hidden_size1, self.hidden_size2, batch_first=True)
         self.lstm3 = nn.LSTM(self.hidden_size2, self.hidden_size3, batch_first=True)
@@ -145,7 +145,7 @@ class MiniLSTM(nn.Module):
         self.hidden_size1 = hidden_size1  # 64
         self.batch_size = batch_size
 
-        self.lstm1 = nn.LSTM(40, self.hidden_size1, batch_first=True)
+        self.lstm1 = nn.LSTM(32, self.hidden_size1, batch_first=True)
 
         self.relu = nn.ReLU()
 
