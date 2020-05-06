@@ -7,7 +7,12 @@ import torch
 from torch import optim
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import os
 
+
+"""
+File for running with a default fully connected network.
+"""
 
 DATA_SET_PATH = 'dataset/'
 
@@ -27,14 +32,18 @@ deap_train_loader = DataLoader(deap_train_dataset, shuffle=True, batch_size=batc
 deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_size)
 
 # MODEL_CONFIG
-INPUT_SIZE = 40
-HIDDEN_SIZE1 = 64
-HIDDEN_SIZE2 = 32
-OUTPUT_SIZE = 4
-EXPORT_PATH = 'models/saved_weights/lstm_v2_dropout.pth'
+INPUT_SIZE = 32
+hidden_config = [16, 8, 4]
+OUTPUT_SIZE = 2
 
-model = EEGLSTM(HIDDEN_SIZE1, HIDDEN_SIZE2, batch_size)
-model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
+if not os.path.isdir('./models/saved_weights/lstm/'):
+    os.makedirs('./models/saved_weights/lstm/')
+
+EXPORT_PATH = 'models/saved_weights/lstm/lstm_2_layer_paper.pth'
+
+
+model = EEGLSTM(INPUT_SIZE, HIDDEN_SIZE1, HIDDEN_SIZE2, batch_size)
+# model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
 model.to(device)
 
 # TRAINING_CONFIG
@@ -42,6 +51,23 @@ CRITERION = torch.nn.MSELoss()
 LR = 1e-5
 EPCH = 3000
 optim = optim.Adam(model.parameters(), lr=LR)
+
+print("===========[INFO REPORT]===========")
+print("Arch. [%d -> %d]" % (HIDDEN_SIZE1, HIDDEN_SIZE2))
+print("<I> Using model config")
+print("\tInput size :", INPUT_SIZE)
+print("\tExport path :", EXPORT_PATH)
+print("<I> Using training config")
+print("\tBatch size :", batch_size)
+print("\tLearning Rate :", LR)
+print("\tEpochs :", EPCH)
+print("\tOptimizer :", "Adam")
+
+print("Please check config...")
+input("\tPress ENTER to proceed.")
+
+
+print("Starting training GRU model...")
 
 # TRAINING VISUALIZE CONFIG
 PLOT_EVERY = 10
