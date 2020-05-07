@@ -7,7 +7,7 @@ from torch import optim
 import matplotlib.pyplot as plt
 
 
-DATA_SET_PATH = 'dataset/data_preprocessed_python/'
+DATA_SET_PATH = '../dataset/data_preprocessed_python/'
 
 deap_dataset_test = DEAP_DATASET(DATA_SET_PATH)
 deap_dataset_test.set_participant_id(1)

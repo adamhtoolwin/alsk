@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 import torch
 from util.train import select_last_elm
 
-DATA_SET_PATH = 'dataset/'
+DATA_SET_PATH = '../dataset/'
 deap_val = ModularDeapDataset(DATA_SET_PATH, train=False)
 loader = DataLoader(deap_val, shuffle=True, batch_size=1)
 
@@ -13,7 +13,7 @@ HIDDEN_SIZE1 = 64
 HIDDEN_SIZE2 = 32
 OUTPUT_SIZE = 4
 
-MDL_PATH = 'models/saved_weights/lstm_v2_dropout.pth'
+MDL_PATH = '../models/saved_weights/lstm_v2_dropout.pth'
 
 model = EEGLSTM(HIDDEN_SIZE1, HIDDEN_SIZE2, 1)
 

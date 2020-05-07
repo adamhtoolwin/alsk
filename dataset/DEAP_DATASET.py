@@ -6,24 +6,51 @@ import random
 
 
 class DEAP_DATASET(Dataset):
-    __WHOLE_DATA = []
+    __WHOLE_DATA = {}
+    __TRAIN_DATA = {"data": [], "labels": []}
+    __TEST_DATA = {"data": [], "labels": []}
     __CURR_PART_ID = 0
 
-    def __init__(self, path: str):
+    def __init__(self, path: str, train: bool, part_id: int, cross_val_id: int):
+        self.train = train
         self.EEG_FILES = glob.glob(str(path) + "/data_preprocessed_python/*.dat")
+        self.cross_val_id = cross_val_id
+        self.set_participant_id(part_id)
+        self.set_cross_id(cross_val_id)
 
     def set_participant_id(self, i):
         self.__CURR_PART_ID = i
-        dat = pickle.load(open(self.EEG_FILES[i], 'rb'), encoding='iso-8859-1')
-        self.__WHOLE_DATA.append(dat)
+        self.__WHOLE_DATA = pickle.load(open(self.EEG_FILES[i], 'rb'), encoding='iso-8859-1')
+
+    def set_cross_id(self, c):
+        self.cross_val_id = c
+        start = (c - 1) * 8
+        end = (c * 8) - 1
+        for i, (data, label) in enumerate(zip(self.__WHOLE_DATA['data'], self.__WHOLE_DATA['labels'])):
+            if start <= i <= end:  # If in range of choosen, put it to test set
+                self.__TEST_DATA['data'].append(data)
+                self.__TEST_DATA['labels'].append(label)
+            else:
+                self.__TRAIN_DATA['data'].append(data)
+                self.__TRAIN_DATA['labels'].append(label)
 
     def __len__(self):
-        return len(self.__WHOLE_DATA[self.__CURR_PART_ID]['labels'])
+        if self.train:
+            return len(self.__TRAIN_DATA['labels'])
+        else:
+            return len(self.__TEST_DATA['labels'])
 
     def __getitem__(self, i):
-        eeg = self.__WHOLE_DATA[self.__CURR_PART_ID]['data'][i]
-        label = self.__WHOLE_DATA[self.__CURR_PART_ID]['labels'][i]
+        if self.train:
+            eeg = self.__TRAIN_DATA['data'][i][0:32]
+            label = self.__TRAIN_DATA['labels'][i]
+        else:
+            eeg = self.__TEST_DATA['data'][i][0:32]
+            label = self.__TEST_DATA['labels'][i]
         return torch.tensor(eeg, dtype=torch.float), torch.tensor(label, dtype=torch.float)
+
+    def set_train(self, is_train: bool):
+        self.train = is_train
 
     # TESTING METHOD
     def test_get_item(self, i):
@@ -71,7 +98,3 @@ class CombinedDeapDataset(Dataset):
         eeg = self.eegs[i]
         label = self.labels[i]
         return torch.tensor(eeg, dtype=torch.float), torch.tensor(label, dtype=torch.float)
-
-
-
-

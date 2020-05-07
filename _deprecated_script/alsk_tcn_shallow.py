@@ -7,7 +7,7 @@ from torch import optim
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-DATA_SET_PATH = 'dataset/'
+DATA_SET_PATH = '../dataset/'
 
 CUDA = True
 gpu_id = '1'
@@ -25,10 +25,10 @@ deap_train_loader = DataLoader(deap_train_dataset, shuffle=True, batch_size=batc
 deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_size)
 
 # MODEL_CONFIG
-CHAN_LIST = [32, 24, 16, 10, 6, 2]  # The list of each convolutional layers
-KERN_SIZE = 5
+CHAN_LIST = [64, 32, 2]  # The list of each convolutional layers
+KERN_SIZE = 15
 DROP_OUT = 0.2
-EXPORT_PATH = 'models/saved_weights/tcn_deeper_v2.pth'
+EXPORT_PATH = 'models/saved_weights/tcn_shallow.pth'
 
 model = EEG_TCN(CHAN_LIST, KERN_SIZE, DROP_OUT)
 model.to(device)
@@ -66,5 +66,5 @@ for i in tqdm(range(EPCH)):
         plt.plot(loss_hist, label="Training loss")
         plt.plot(val_loss_hist, label="Validation loss")
         plt.legend()
-        plt.savefig("./results/loss_tcn_part2.png")
+        plt.savefig("./results/loss_tcn_shallow.png")
         plt.show()

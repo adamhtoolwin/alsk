@@ -1,6 +1,6 @@
 from dataset.DEAP_DATASET import DEAP_DATASET, CombinedDeapDataset, ModularDeapDataset
 from models.simple_rnn import SIMPLE_RNN
-from models.lstm import EEGLSTM_V3
+from models.lstm import *
 from util.train import *
 from torch.utils.data import DataLoader
 import torch
@@ -9,10 +9,10 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 
-DATA_SET_PATH = 'dataset/'
+DATA_SET_PATH = '../dataset/'
 
 CUDA = True
-gpu_id = '0'
+gpu_id = '1'
 batch_size = 128
 device = torch.device("cuda:" + gpu_id if CUDA and torch.cuda.is_available() else "cpu")
 print("[SYS] Using", device)
@@ -32,26 +32,25 @@ HIDDEN_SIZE1 = 64
 HIDDEN_SIZE2 = 32
 HIDDEN_SIZE3 = 32
 OUTPUT_SIZE = 4
-EXPORT_PATH = 'models/saved_weights/lstm_v2_big.pth'
+EXPORT_PATH = '../models/saved_weights/lstm_tiny.pth'
 
-model = EEGLSTM_V3(HIDDEN_SIZE1, HIDDEN_SIZE2, HIDDEN_SIZE3, batch_size, INPUT_SIZE)
-model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
+model = MiniLSTM(20, batch_size)
 model.to(device)
 
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()
-LR = 1e-5
+LR = 1e-4
 EPCH = 3000
 optim = optim.Adam(model.parameters(), lr=LR)
 RESUME = False
 
 # TRAINING VISUALIZE CONFIG
-PLOT_EVERY = 10
+PLOT_EVERY = 5
 
 print("===========[LSTM INFO REPORT]===========")
 print("<I> Using model config")
 print("\tModel input size :", INPUT_SIZE)
-print("\tModel hidden size :", [HIDDEN_SIZE1, HIDDEN_SIZE2, HIDDEN_SIZE3])
+print("\tModel hidden size :", [20])
 print("\tExport path :", EXPORT_PATH)
 print("<I> Using training config")
 print("\tBatch size :", batch_size)
@@ -69,6 +68,7 @@ else:
 
 print("Starting training model...")
 
+
 loss_hist = []
 val_loss_hist = []
 for i in tqdm(range(EPCH)):
@@ -80,8 +80,9 @@ for i in tqdm(range(EPCH)):
     val_loss_hist.append(val_loss)
     # print(val_loss - avg_loss)
     if i % PLOT_EVERY == 0 or i == EPCH-1:
+        plt.clf()
         plt.plot(loss_hist, label="Training loss")
         plt.plot(val_loss_hist, label="Validation loss")
         plt.legend()
-        plt.savefig("loss.png")
+        plt.savefig("./results/loss_lstm_tiny.png")
         plt.show()

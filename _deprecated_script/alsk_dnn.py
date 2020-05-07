@@ -14,7 +14,7 @@ import os
 File for running with a default fully connected network.
 """
 
-DATA_SET_PATH = 'dataset/'
+DATA_SET_PATH = '../dataset/'
 
 CUDA = True
 gpu_id = '0'

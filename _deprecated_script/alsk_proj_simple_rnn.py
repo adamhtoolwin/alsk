@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 
 
-DATA_SET_PATH = 'dataset/'
+DATA_SET_PATH = '../dataset/'
 
 CUDA = True
 gpu_id = '1'

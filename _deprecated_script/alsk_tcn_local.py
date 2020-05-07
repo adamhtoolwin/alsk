@@ -7,7 +7,7 @@ from torch import optim
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-DATA_SET_PATH = 'dataset/'
+DATA_SET_PATH = '../dataset/'
 
 batch_size = 128
 device = "cuda:1"
@@ -23,7 +23,7 @@ deap_test_loader = DataLoader(deap_test_dataset, shuffle=True, batch_size=batch_
 CHAN_LIST = [32, 24, 16, 10, 6, 2]  # The list of each convolutional layers
 KERN_SIZE = 5
 DROP_OUT = 0.2
-EXPORT_PATH = 'models/saved_weights/tcn_deeper_small_kern.pth'
+EXPORT_PATH = '../models/saved_weights/tcn_deeper_small_kern.pth'
 
 model = EEG_TCN(CHAN_LIST, KERN_SIZE, DROP_OUT)
 model.to(device)
