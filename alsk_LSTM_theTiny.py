@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 import torch.optim as optimizer
 import matplotlib.pyplot as plt
 
-from models.lstm import EEGLSTM
+from models.lstm import MiniLSTM
 from util.train import *
 import numpy as np
 import os
@@ -22,15 +22,14 @@ print("")
 
 # MODEL_CONFIG
 INPUT_SIZE = 32
-HIDDEN_SIZE1 = 64
-HIDDEN_SIZE2 = 32
+HIDDEN_SIZE1 = 20
 OUTPUT_SIZE = 4
-model = EEGLSTM(INPUT_SIZE, HIDDEN_SIZE1, HIDDEN_SIZE2, batch_size)
+model = MiniLSTM(HIDDEN_SIZE1,batch_size)
 # model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
 model.to(device)
 
 # PATH initialize
-EXPORT_PATH_DIR = 'models/saved_weights/lstm/Alhagry_variant/'
+EXPORT_PATH_DIR = 'models/saved_weights/lstm/theTiny/'
 mkdir(EXPORT_PATH_DIR)
 
 # TRAINING_CONFIG
@@ -40,7 +39,7 @@ EPCH = 1000
 optim = optimizer.Adam(model.parameters(), lr=LR)
 
 print("===========[INFO REPORT]===========")
-print("Arch. [%d -> %d]" % (HIDDEN_SIZE1, HIDDEN_SIZE2))
+print("Arch. [%d]" % (HIDDEN_SIZE1))
 print("<I> Using model config")
 print("\tInput size :", INPUT_SIZE)
 print("\tExport path :", EXPORT_PATH_DIR)
@@ -56,7 +55,7 @@ input("\tPress ENTER to proceed.")
 print("Starting training GRU model...")
 
 # TRAINING VISUALIZE CONFIG
-PLOT_EVERY = 10
+PLOT_EVERY = 500
 
 DATA_SET_PATH = "../dataset"
 train_dataset = DEAP_DATASET(DATA_SET_PATH, train=True, part_id=1, cross_val_id=1)
