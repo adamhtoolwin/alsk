@@ -1,9 +1,13 @@
 from numpy import mean
 import torch
 from tqdm import tqdm
+import os
 
 DBG = False
 
+def mkdir(PATH):
+    if not os.path.isdir('./' + PATH):
+        os.makedirs('./' + PATH)
 
 # This function is used for select last element of the sequence.
 def select_last_elm(output, device):

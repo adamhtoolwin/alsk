@@ -43,10 +43,10 @@ class DEAP_DATASET(Dataset):
     def __getitem__(self, i):
         if self.train:
             eeg = self.__TRAIN_DATA['data'][i][0:32]
-            label = self.__TRAIN_DATA['labels'][i]
+            label = self.__TRAIN_DATA['labels'][i][0:2]
         else:
             eeg = self.__TEST_DATA['data'][i][0:32]
-            label = self.__TEST_DATA['labels'][i]
+            label = self.__TEST_DATA['labels'][i][0:2]
         return torch.tensor(eeg, dtype=torch.float), torch.tensor(label, dtype=torch.float)
 
     def set_train(self, is_train: bool):
