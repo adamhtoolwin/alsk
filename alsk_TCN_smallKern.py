@@ -25,9 +25,9 @@ CHAN_LIST = [32, 24, 16, 10, 6, 2]  # The list of each convolutional layers
 KERN_SIZE = 5
 DROP_OUT = 0.2
 INPUT_SIZE = 32
-model = EEG_TCN(CHAN_LIST, KERN_SIZE, DROP_OUT)
+# model = EEG_TCN(CHAN_LIST, KERN_SIZE, DROP_OUT)
 # model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
-model.to(device)
+# model.to(device)
 
 # PATH initialize
 EXPORT_PATH_DIR = 'models/saved_weights/tcn/smallKernel/'
@@ -37,7 +37,6 @@ mkdir(EXPORT_PATH_DIR)
 CRITERION = torch.nn.MSELoss()
 LR = 1e-4
 EPCH = 1000
-optim = optimizer.Adam(model.parameters(), lr=LR)
 
 print("===========[INFO REPORT]===========")
 print("<I> Using model config")
@@ -70,6 +69,11 @@ for p in range(1, PARTICIPANT_NUM + 1):
     train_dataset.set_participant_id(p - 1)
     test_dataset.set_participant_id(p - 1)
     for c in range(1, CROSS_VAL + 1):
+        model = EEG_TCN(CHAN_LIST, KERN_SIZE, DROP_OUT)
+        # model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
+        model.to(device)
+
+        optim = optimizer.Adam(model.parameters(), lr=LR)
         print("Cross val:", c)
         # Directory preparation
         EXPORT_PATH = EXPORT_PATH_DIR + "s" + str(p) + "/"
