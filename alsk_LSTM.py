@@ -1,4 +1,4 @@
-PARTICIPANT_NUM = 5  # This is constant... this must not be changed
+PARTICIPANT_NUM = 3  # This is constant... this must not be changed
 CROSS_VAL = 5  # This is constant... this must not be changed
 
 from dataset.DEAP_DATASET import DEAP_DATASET
@@ -30,8 +30,8 @@ model = EEGLSTM(INPUT_SIZE, HIDDEN_SIZE1, HIDDEN_SIZE2, batch_size)
 model.to(device)
 
 # PATH initialize
-EXPORT_PATH = 'models/saved_weights/lstm/Alhagry_variant/'
-mkdir(EXPORT_PATH)
+EXPORT_PATH_DIR = 'models/saved_weights/lstm/Alhagry_variant/'
+mkdir(EXPORT_PATH_DIR)
 
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()
@@ -43,7 +43,7 @@ print("===========[INFO REPORT]===========")
 print("Arch. [%d -> %d]" % (HIDDEN_SIZE1, HIDDEN_SIZE2))
 print("<I> Using model config")
 print("\tInput size :", INPUT_SIZE)
-print("\tExport path :", EXPORT_PATH)
+print("\tExport path :", EXPORT_PATH_DIR)
 print("<I> Using training config")
 print("\tBatch size :", batch_size)
 print("\tLearning Rate :", LR)
@@ -71,8 +71,8 @@ for p in range(1, PARTICIPANT_NUM + 1):
     for c in range(1, CROSS_VAL + 1):
         print("Cross val:", c)
         # Directory preparation
-        EXPORT_PATH = EXPORT_PATH + "s" + str(p) + "/c" + str(c) + ".pth"
-        #mkdir(EXPORT_PATH)
+        EXPORT_PATH = EXPORT_PATH_DIR + "s" + str(p) + "/"
+        mkdir(EXPORT_PATH)
 
         train_dataset.set_cross_id(c)
         test_dataset.set_cross_id(p - 1)
@@ -87,6 +87,7 @@ for p in range(1, PARTICIPANT_NUM + 1):
             loss_hist.append(avg_loss)
             val_loss = eval_lstm_gru(model, CRITERION, deap_test_loader, device, eval_size=99999)
             if not DBG:
+                EXPORT_PATH = EXPORT_PATH + "c" + str(c) + ".pth"
                 export_or_not(val_loss, val_loss_hist, model, EXPORT_PATH)
             val_loss_hist.append(val_loss)
             # print(val_loss - avg_loss)
