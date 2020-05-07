@@ -37,7 +37,6 @@ mkdir(EXPORT_PATH_DIR)
 CRITERION = torch.nn.MSELoss()
 LR = 1e-4
 EPCH = 1000
-optim = optimizer.Adam(model.parameters(), lr=LR)
 
 print("===========[INFO REPORT]===========")
 print("<I> Using model config")
