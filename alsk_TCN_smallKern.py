@@ -1,5 +1,5 @@
-PARTICIPANT_NUM = 2  # This is constant... this must not be changed
-CROSS_VAL = 2  # This is constant... this must not be changed
+PARTICIPANT_NUM = 3  # This is constant... this must not be changed
+CROSS_VAL = 5  # This is constant... this must not be changed
 
 from dataset.DEAP_DATASET import DEAP_DATASET
 from tqdm.auto import trange
@@ -36,7 +36,7 @@ mkdir(EXPORT_PATH_DIR)
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()
 LR = 1e-4
-EPCH = 10
+EPCH = 1000
 optim = optimizer.Adam(model.parameters(), lr=LR)
 
 print("===========[INFO REPORT]===========")
@@ -57,7 +57,7 @@ input("\tPress ENTER to proceed.")
 print("Starting training TCN small kernel model...")
 
 # TRAINING VISUALIZE CONFIG
-PLOT_EVERY = 10
+PLOT_EVERY = 100
 
 DATA_SET_PATH = "./dataset"
 train_dataset = DEAP_DATASET(DATA_SET_PATH, train=True, part_id=1, cross_val_id=1)
