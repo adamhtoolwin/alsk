@@ -76,14 +76,14 @@ for p in range(1, PARTICIPANT_NUM + 1):
         mkdir(EXPORT_PATH)
 
         train_dataset.set_cross_id(c)
-        test_dataset.set_cross_id(p - 1)
+        test_dataset.set_cross_id(c)
 
         deap_train_loader = DataLoader(train_dataset, shuffle=True, batch_size=batch_size)
         deap_test_loader = DataLoader(test_dataset, shuffle=True, batch_size=batch_size)
 
         loss_hist = []
         val_loss_hist = []
-        if (p,c) == (1,1) or (p,c) == (1,2) or (p,c) == (1,3):
+        if False:
             pass
         else:
             for i in trange(EPCH, desc="Epoch"):

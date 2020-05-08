@@ -54,7 +54,7 @@ print("Starting training GRU model...")
 # TRAINING VISUALIZE CONFIG
 PLOT_EVERY = 500
 
-DATA_SET_PATH = "../dataset"
+DATA_SET_PATH = "./dataset"
 train_dataset = DEAP_DATASET(DATA_SET_PATH, train=True, part_id=1, cross_val_id=1)
 test_dataset = DEAP_DATASET(DATA_SET_PATH, train=False, part_id=1, cross_val_id=1)
 
@@ -77,7 +77,7 @@ for p in range(1, PARTICIPANT_NUM + 1):
         mkdir(EXPORT_PATH)
 
         train_dataset.set_cross_id(c)
-        test_dataset.set_cross_id(p - 1)
+        test_dataset.set_cross_id(c)
 
         deap_train_loader = DataLoader(train_dataset, shuffle=True, batch_size=batch_size)
         deap_test_loader = DataLoader(test_dataset, shuffle=True, batch_size=batch_size)
