@@ -23,6 +23,9 @@ class DEAP_DATASET(Dataset):
         self.__WHOLE_DATA = pickle.load(open(self.EEG_FILES[i], 'rb'), encoding='iso-8859-1')
 
     def set_cross_id(self, c):
+        self.__TRAIN_DATA = {"data": [], "labels": []}
+        self.__TEST_DATA = {"data": [], "labels": []}
+
         self.cross_val_id = c
         start = (c - 1) * 8
         end = (c * 8) - 1
