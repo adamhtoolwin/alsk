@@ -32,8 +32,8 @@ mkdir(EXPORT_PATH_DIR)
 
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()
-LR = 1e-4
-EPCH = 500
+LR = 1e-3
+EPCH = 800
 
 print("===========[INFO REPORT]===========")
 print("Arch. [%d -> %d]" % (HIDDEN_SIZE1, HIDDEN_SIZE2))
@@ -84,27 +84,30 @@ for p in range(1, PARTICIPANT_NUM + 1):
 
         loss_hist = []
         val_loss_hist = []
-        for i in trange(EPCH, desc="Epoch"):
+        if False:
+            pass
+        else:
+            for i in trange(EPCH, desc="Epoch"):
 
-            avg_loss = train_lstm_gru(model, optim, CRITERION, deap_train_loader, device)
-            loss_hist.append(avg_loss)
-            val_loss = eval_lstm_gru(model, CRITERION, deap_test_loader, device, eval_size=99999)
+                avg_loss = train_lstm_gru(model, optim, CRITERION, deap_train_loader, device)
+                loss_hist.append(avg_loss)
+                val_loss = eval_lstm_gru(model, CRITERION, deap_test_loader, device, eval_size=99999)
 
-            if not DBG:
-                export_or_not(val_loss, val_loss_hist, model, EXPORT_PATH_FILE)
+                if not DBG:
+                    export_or_not(val_loss, val_loss_hist, model, EXPORT_PATH_FILE)
 
-            val_loss_hist.append(val_loss)
-            # print(val_loss - avg_loss)
-            if i % PLOT_EVERY == 0 or i == EPCH - 1:
-                plt.plot(loss_hist, label="Training loss")
-                plt.plot(val_loss_hist, label="Validation loss")
-                plt.title("On participant" + str(p) + "cross id" + str(c))
-                plt.legend()
-                plt.savefig("loss_Alhagry_" + str(p) + "_" + str(c) + ".png")
-                plt.show()
+                val_loss_hist.append(val_loss)
+                # print(val_loss - avg_loss)
+                if i % PLOT_EVERY == 0 or i == EPCH - 1:
+                    plt.plot(loss_hist, label="Training loss")
+                    plt.plot(val_loss_hist, label="Validation loss")
+                    plt.title("On participant" + str(p) + "cross id" + str(c))
+                    plt.legend()
+                    plt.savefig("loss_Alhagry_" + str(p) + "_" + str(c) + ".png")
+                    plt.show()
 
         # After finish training, load the best model
-        print(">> Loading previous model from : " + EXPORT_PATH)
+        print(">> Loading previous model from : " + EXPORT_PATH_FILE)
         model.load_state_dict(torch.load(EXPORT_PATH_FILE, map_location=device))
         model.to(device)
         train_loss = eval_lstm_gru(model, CRITERION, deap_train_loader, device, eval_size=99999)

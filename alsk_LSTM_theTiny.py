@@ -26,13 +26,13 @@ HIDDEN_SIZE1 = 20
 OUTPUT_SIZE = 4
 
 # PATH initialize
-EXPORT_PATH_DIR = 'models/saved_weights/lstm/Alhagry_variant/'
+EXPORT_PATH_DIR = 'models/saved_weights/lstm/theTiny/'
 mkdir(EXPORT_PATH_DIR)
 
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()
-LR = 1e-4
-EPCH = 500
+LR = 1e-3
+EPCH = 800
 
 print("===========[INFO REPORT]===========")
 print("Arch. [%d]" % (HIDDEN_SIZE1))
