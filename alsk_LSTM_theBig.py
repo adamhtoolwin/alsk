@@ -26,9 +26,6 @@ HIDDEN_SIZE1 = 64
 HIDDEN_SIZE2 = 32
 HIDDEN_SIZE3 = 32
 OUTPUT_SIZE = 4
-model = EEGLSTM_V2(HIDDEN_SIZE1, HIDDEN_SIZE2, HIDDEN_SIZE3, batch_size)
-# model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
-model.to(device)
 
 # PATH initialize
 EXPORT_PATH_DIR = 'models/saved_weights/lstm/theBig/'
@@ -37,11 +34,10 @@ mkdir(EXPORT_PATH_DIR)
 # TRAINING_CONFIG
 CRITERION = torch.nn.MSELoss()
 LR = 1e-4
-EPCH = 1000
-optim = optimizer.Adam(model.parameters(), lr=LR)
+EPCH = 500
 
 print("===========[INFO REPORT]===========")
-print("Arch. [%d -> %d -> %d]" % (HIDDEN_SIZE1, HIDDEN_SIZE2, HIDDEN_SIZE3))
+print("Arch. [%d -> %d ->%d]" % (HIDDEN_SIZE1, HIDDEN_SIZE2, HIDDEN_SIZE3))
 print("<I> Using model config")
 print("\tInput size :", INPUT_SIZE)
 print("\tExport path :", EXPORT_PATH_DIR)
@@ -59,7 +55,7 @@ print("Starting training GRU model...")
 # TRAINING VISUALIZE CONFIG
 PLOT_EVERY = 500
 
-DATA_SET_PATH = "../dataset"
+DATA_SET_PATH = "./dataset"
 train_dataset = DEAP_DATASET(DATA_SET_PATH, train=True, part_id=1, cross_val_id=1)
 test_dataset = DEAP_DATASET(DATA_SET_PATH, train=False, part_id=1, cross_val_id=1)
 
@@ -70,9 +66,15 @@ for p in range(1, PARTICIPANT_NUM + 1):
     train_dataset.set_participant_id(p - 1)
     test_dataset.set_participant_id(p - 1)
     for c in range(1, CROSS_VAL + 1):
+
+        model = EEGLSTM_V2(HIDDEN_SIZE1, HIDDEN_SIZE2,HIDDEN_SIZE3, batch_size)
+        model.to(device)
+        optim = optimizer.Adam(model.parameters(), lr=LR)
+
         print("Cross val:", c)
         # Directory preparation
         EXPORT_PATH = EXPORT_PATH_DIR + "s" + str(p) + "/"
+        EXPORT_PATH_FILE = EXPORT_PATH + "c" + str(c) + ".pth"
         mkdir(EXPORT_PATH)
 
         train_dataset.set_cross_id(c)
@@ -83,26 +85,31 @@ for p in range(1, PARTICIPANT_NUM + 1):
 
         loss_hist = []
         val_loss_hist = []
-        for i in trange(EPCH, desc="Epoch"):
-            avg_loss = train_lstm_gru(model, optim, CRITERION, deap_train_loader, device)
-            loss_hist.append(avg_loss)
-            val_loss = eval_lstm_gru(model, CRITERION, deap_test_loader, device, eval_size=99999)
-            if not DBG:
-                EXPORT_PATH = EXPORT_PATH + "c" + str(c) + ".pth"
-                export_or_not(val_loss, val_loss_hist, model, EXPORT_PATH)
-            val_loss_hist.append(val_loss)
-            # print(val_loss - avg_loss)
-            if i % PLOT_EVERY == 0 or i == EPCH - 1:
-                plt.plot(loss_hist, label="Training loss")
-                plt.plot(val_loss_hist, label="Validation loss")
-                plt.title("On participant" + str(p) + "cross id" + str(c))
-                plt.legend()
-                plt.savefig("loss_" + str(p) + "_" + str(c) + ".png")
-                plt.show()
+        # SKIP
+        if (p,c) == (1,1) or (p,c) == (1,2):
+            pass
+        else:
+            for i in trange(EPCH, desc="Epoch"):
+                avg_loss = train_lstm_gru(model, optim, CRITERION, deap_train_loader, device)
+                loss_hist.append(avg_loss)
+                val_loss = eval_lstm_gru(model, CRITERION, deap_test_loader, device, eval_size=99999)
+
+                if not DBG:
+                    export_or_not(val_loss, val_loss_hist, model, EXPORT_PATH_FILE)
+
+                val_loss_hist.append(val_loss)
+                # print(val_loss - avg_loss)
+                if i % PLOT_EVERY == 0 or i == EPCH - 1:
+                    plt.plot(loss_hist, label="Training loss")
+                    plt.plot(val_loss_hist, label="Validation loss")
+                    plt.title("On participant" + str(p) + "cross id" + str(c))
+                    plt.legend()
+                    plt.savefig("loss_theBig_" + str(p) + "_" + str(c) + ".png")
+                    plt.show()
 
         # After finish training, load the best model
         print(">> Loading previous model from : " + EXPORT_PATH)
-        model.load_state_dict(torch.load(EXPORT_PATH, map_location=device))
+        model.load_state_dict(torch.load(EXPORT_PATH_FILE, map_location=device))
         model.to(device)
         train_loss = eval_lstm_gru(model, CRITERION, deap_train_loader, device, eval_size=99999)
         val_loss = eval_lstm_gru(model, CRITERION, deap_test_loader, device, eval_size=99999)
